@@ -45,6 +45,7 @@ import se.openflisp.sls.Input;
 import se.openflisp.sls.Output;
 import se.openflisp.sls.Signal;
 import	se.openflisp.gui.swing.components.ComponentView;
+import se.openflisp.gui.swing.util.*;
 
 /**	
  * The Board for simulating gates 
@@ -272,6 +273,7 @@ public class SimulationBoard extends JPanel{
     	@Override
     	public void paintComponent(Graphics g) {
     		Graphics2D g2 = (Graphics2D) g;
+
     		super.paintComponent(g2);
     	}
     }
