@@ -13,14 +13,27 @@ import javax.swing.JButton;
 import se.openflisp.sls.Input;
 import se.openflisp.sls.Output;
 import se.openflisp.sls.Signal;
+import se.openflisp.sls.Signal.State;
 
 @SuppressWarnings("serial")
 public class WireView extends JButton {	
 	private GeneralPath wire = new GeneralPath();
+	private Signal.State wireState;
 	
 	WireView(){
 		setContentAreaFilled(false);
+		
 	}
+	
+	/**
+	 * Controls the state of the signal from the component
+	 */
+	
+	//ÄR DET HÄR RÄTT??
+	public void wireState(Signal.State s){
+		wireState = s;
+	}
+	
 	
 	/**
 	 * Set this curve
@@ -64,6 +77,7 @@ public class WireView extends JButton {
 			g2.setColor(Color.BLUE);
 		} else {
 			g2.setColor(Color.RED);
+			
 		}
 		
 		g2.draw(wire);
@@ -74,6 +88,16 @@ public class WireView extends JButton {
 	 */
 	protected void paintBorder(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(6));
+		g2.setColor(Color.BLACK);
+		g2.draw(wire);
+		//ATT FIXA!!!
+		if(wireState == Signal.State.HIGH){
+			g2.setColor(Color.BLUE);
+		}
+		else{
+			g2.setColor(Color.WHITE);
+		}
 		g2.setStroke(new BasicStroke(4));
 		g2.draw(wire);
 	}
