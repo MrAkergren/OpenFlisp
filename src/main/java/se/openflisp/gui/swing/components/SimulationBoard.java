@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -30,6 +29,9 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
@@ -39,16 +41,23 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
 
 import se.openflisp.sls.event.CircuitListener;
 import se.openflisp.sls.event.ComponentListener;
 import se.openflisp.sls.event.ListenerContext;
-
 import se.openflisp.sls.simulation.Circuit2D;
 import se.openflisp.sls.Component;
 import se.openflisp.sls.Input;
@@ -82,15 +91,18 @@ public class SimulationBoard extends JPanel {
 
 	// A panel containing wires
 	private WirePanel wirePanel;
-	
+
 	// We need this point when moving components
 	Point point;
+
+	//TEMP
+	private boolean clicked = false;
 
 	/**
 	 * Creates the simulation board
 	 */
 	public SimulationBoard() {
-		
+
 		// Handle drop events
 		this.dropTarget = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, new DropTargetListener() {
 			@Override
@@ -150,7 +162,7 @@ public class SimulationBoard extends JPanel {
 		this.wirePanel = new WirePanel(this);
 		this.wirePanel.setLayout(null);
 		this.wirePanel.setOpaque(false);
-		
+
 		this.backgroundPanel = new BackgroundPanel();
 		this.backgroundPanel.setOpaque(true);
 
@@ -173,20 +185,20 @@ public class SimulationBoard extends JPanel {
 		component.setOpaque(false);
 		this.componentLayer.add(component);
 		this.components.put(component.component, component);
-		
+
 		for( SignalView view : ((GateView) component).outputSignals) {
 			view.addPropertyChangeListener(wirePanel);
 		}
-		
+
 		for( SignalView view : ((GateView) component).inputSignals) {
 			view.addPropertyChangeListener(wirePanel);
 		}
-		
+
 		if (component instanceof GateView) {
 			JPanel identifierPanel = ((GateView) component).getIdentifierPane();
 			component.addMouseMotionListener(new MouseMotionAdapter()  {
 
-				
+
 				@Override
 				public void mouseMoved(MouseEvent e) {
 					// TODO Auto-generated method stub
@@ -198,7 +210,7 @@ public class SimulationBoard extends JPanel {
 						Point delta = new Point(mouseevent.getX() - SimulationBoard.this.point.x, 
 								mouseevent.getY() - SimulationBoard.this.point.y );
 						Point curLocation = SimulationBoard.this.circuit.getComponentLocation(((GateView)mouseevent.getSource()).component);
-						
+
 						SimulationBoard.this.circuit.setComponentLocation(((GateView)mouseevent.getSource()).component,
 								new Point(curLocation.x + delta.x, curLocation.y + delta.y));
 					}
@@ -208,7 +220,7 @@ public class SimulationBoard extends JPanel {
 
 				@Override
 				public void mouseClicked(MouseEvent mouseevent) {
-					
+					SimulationBoard.this.point = mouseevent.getPoint();
 				}
 
 				@Override
@@ -275,6 +287,8 @@ public class SimulationBoard extends JPanel {
 			SimulationBoard.this.wirePanel.ComponentMoved(component, from, to);
 		}
 	};
+
+
 
 	/**
 	 * 	Creates a grid in the background layer

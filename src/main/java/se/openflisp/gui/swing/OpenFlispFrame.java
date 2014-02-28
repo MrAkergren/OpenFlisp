@@ -18,11 +18,16 @@ package se.openflisp.gui.swing;
 
 
 import java.awt.BorderLayout;
-
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 
 import se.openflisp.gui.swing.OpenFlispPerspectives;
 
@@ -66,10 +71,34 @@ public class OpenFlispFrame extends JFrame {
 		this.perspectives.addComponentToPane(this.getContentPane());
 		
 		// Add the menubar to this frame
-		this.menu = new OpenFlispMenu();
-		this.menu.addMenuToFrame(this);
+				this.menu = new OpenFlispMenu();
+				this.menu.addMenuToFrame(this);
+		
+		this.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("key pressed f: " + e);
+			}
+		});
+		
+		
 		
 		this.pack();
 		this.setVisible(true);
+		this.setFocusable(true);
 	}
 }	
