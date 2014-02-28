@@ -64,13 +64,13 @@ public class SignalView extends JButton {
 
 	//We need this to determine if a x.y coordinate is whithin this button
 	private Shape shape;
-	
+
 	//Will listen for mouse events
 	private SignalViewListener signalViewListener = new SignalViewListener();
-	
+
 	// Testing propertychanged support
 	private PropertyChangeSupport changes;
-	
+
 	public se.openflisp.sls.Component component;
 
 	public SignalView(Signal signal){
@@ -125,7 +125,7 @@ public class SignalView extends JButton {
 			if (signal.getOwner() instanceof NandGate || signal.getOwner() instanceof NandGate) {
 				g2.fillOval(0,0,arcLength-1,arcLength-1);
 			} else {
-			g2.fillOval(0, btnSize.height/2, btnSize.width - (arcLength+1), btnSize.height/2);
+				//g2.drawLine();
 			}
 			g2.setStroke(new BasicStroke(1));
 			g2.drawOval(btnSize.width - (arcLength+1),0,arcLength-1,arcLength-1);
@@ -154,7 +154,7 @@ public class SignalView extends JButton {
 		changes.addPropertyChangeListener(l);
 	}
 
-	
+
 	private class SignalViewListener extends MouseAdapter implements MouseListener {
 		@Override
 		public void mouseDragged(MouseEvent event) {
@@ -164,7 +164,7 @@ public class SignalView extends JButton {
 		@Override
 		public void mouseMoved(MouseEvent arg0) {
 		}
-		
+
 		@Override
 		public void mouseReleased(MouseEvent event) {
 			changes.firePropertyChange("released", null, event);
