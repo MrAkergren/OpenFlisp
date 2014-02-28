@@ -57,8 +57,8 @@ public class GateView extends ComponentView {
 	private JPanel	inputPanel;
 	private	 JPanel	outputPanel;
 	private JLabel	identifier;
-	public List<SignalView>	outputSignals;
-	public List<SignalView>	inputSignals;
+	public List<SignalView> 	outputSignals;
+	public List<SignalView> 	inputSignals;
 
 	/**
 	 * Creates a new gateview given a component
@@ -88,7 +88,7 @@ public class GateView extends ComponentView {
 				this.identifier.setText("0");
 		}	
 		else if (component instanceof OrGate) {
-			this.identifier.setText(">=1");
+			this.identifier.setText("\u22651");
 		}
 		else if ( (component instanceof AndGate) || (component instanceof NandGate) ) {
 			this.identifier.setText("&");
@@ -144,12 +144,14 @@ public class GateView extends ComponentView {
 	 * Add additional signal to this gate
 	 * @param signal
 	 */
-	public void addSignal(Signal signal) {
+	/*
+	public void addSignal2(Signal signal) {
 		if (signal instanceof Output) 
-			this.outputSignals.add(new SignalView(signal));
+			this.outputSignals.add(new SignalView(signal, this.component));
 		if (signal instanceof Input)
-			this.inputSignals.add(new SignalView(signal));
+			this.inputSignals.add(new SignalView(signal, this.component));
 	}
+	*/
 	
 	public JPanel getIdentifierPane() {
 		return this.identifierPanel;

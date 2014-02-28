@@ -45,8 +45,12 @@ import javax.swing.TransferHandler;
 
 
 import se.openflisp.sls.Component;
+import se.openflisp.sls.Signal;
 import se.openflisp.sls.component.AndGate;
+import se.openflisp.sls.component.ConstantGate;
+import se.openflisp.sls.component.NandGate;
 import se.openflisp.sls.component.NotGate;
+import se.openflisp.sls.component.OrGate;
 
 /**	
  * Component for showing all components and enabling drag and drop creation.
@@ -61,6 +65,10 @@ public class ComponentPanel extends JPanel {
 	//TODO Add more
 	ComponentView andGate;
 	ComponentView notGate;
+	ComponentView constantOneGate;
+	ComponentView constantZeroGate;
+	ComponentView nandGate;
+	ComponentView orGate;
 	
 	/**
 	 * Creates the component panel
@@ -69,15 +77,41 @@ public class ComponentPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		
 		andGate = new GateView(new AndGate("AndGate"));
+		andGate.component.getInput("input");
+		
 		notGate = new GateView(new NotGate("NotGate"));
+		andGate.component.getInput("input");
+		
+		constantOneGate = new GateView(new ConstantGate("ConstantOneGate", Signal.State.HIGH));
+		constantZeroGate = new GateView(new ConstantGate("ConstantZeroGate", Signal.State.LOW));
+		
+		nandGate = new GateView(new NandGate("NandGate"));
+		nandGate.component.getInput("input");
+		
+		orGate = new GateView(new OrGate("OrGate"));
+		orGate.component.getInput("input");
+		
 		andGate.setMaximumSize(new Dimension(ComponentView.componentSize,2));
 		notGate.setMaximumSize(new Dimension(ComponentView.componentSize,ComponentView.componentSize/2));
+		constantOneGate.setMaximumSize(new Dimension(ComponentView.componentSize,2));
+		constantZeroGate.setMaximumSize(new Dimension(ComponentView.componentSize,ComponentView.componentSize/2));
+		nandGate.setMaximumSize(new Dimension(ComponentView.componentSize,2));
+		orGate.setMaximumSize(new Dimension(ComponentView.componentSize,ComponentView.componentSize/2));
 		
 		add( Box.createVerticalGlue() );
 		add(andGate);
 		add( Box.createVerticalGlue() );
 		add(notGate);
 		add( Box.createVerticalGlue() );
+		add(constantOneGate);
+		add( Box.createVerticalGlue() );
+		add(constantZeroGate);
+		add( Box.createVerticalGlue() );
+		add(nandGate);
+		add( Box.createVerticalGlue() );
+		add(orGate);
+		add( Box.createVerticalGlue() );
+		
 		/**
 		 * Enable drag and drop listener, by sending a string to the reciever
 		 */
@@ -91,6 +125,18 @@ public class ComponentPanel extends JPanel {
 						event.startDrag(ComponentPanel.this.notGate.ds.DefaultMoveDrop, new StringSelection("AndGate"));
 					else if (view.component instanceof NotGate)
 						event.startDrag(ComponentPanel.this.notGate.ds.DefaultMoveDrop, new StringSelection("NotGate"));
+					else if (view.component instanceof ConstantGate) {
+						if ( ((ConstantGate)view.component).getConstantState() == Signal.State.HIGH)
+							event.startDrag(ComponentPanel.this.notGate.ds.DefaultMoveDrop, new StringSelection("ConstantOneGate"));
+						else
+							event.startDrag(ComponentPanel.this.notGate.ds.DefaultMoveDrop, new StringSelection("ConstantZeroGate"));	
+					} 
+					else if (view.component instanceof NandGate)
+						event.startDrag(ComponentPanel.this.notGate.ds.DefaultMoveDrop, new StringSelection("NandGate"));
+					else if (view.component instanceof OrGate)
+						event.startDrag(ComponentPanel.this.notGate.ds.DefaultMoveDrop, new StringSelection("OrGate"));
+					
+					
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
